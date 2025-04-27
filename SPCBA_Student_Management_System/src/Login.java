@@ -8,7 +8,6 @@ import java.util.Random;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author muushyroom
@@ -18,64 +17,61 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    
-  
-    
     public Login() {
         initComponents();
-        
-        
+
+        tf_username.setVisible(false);
+        tf_password.setVisible(false);
+        login_button.setVisible(false);
         ///--------------------------
          char[] array = "qrstuvwxyz!1234567890@#$%^&*()ABCDE".toCharArray();
-       
+
         Random rand = new Random();
 
         for (int i = 0; i < array.length; i++) {
 
-           int randomIndexToSwap = rand.nextInt(array.length);
-           char temp = array[randomIndexToSwap];
-          array[randomIndexToSwap] = array[i];
+            int randomIndexToSwap = rand.nextInt(array.length);
+            char temp = array[randomIndexToSwap];
+            array[randomIndexToSwap] = array[i];
             array[i] = temp;
 
-       }
+        }
         //STRING NUMBER
-      // String ranCode = char.toString(array[0]) + array[1];
-    String str = String.valueOf(array);
-		// recommended way
-		str = new String(array).substring(0, 5);
-       spcba_code.setText(str);
-       
-       //----------------
+        // String ranCode = char.toString(array[0]) + array[1];
+        String str = String.valueOf(array);
+        // recommended way
+        str = new String(array).substring(0, 5);
+        spcba_code.setText(str);
+
+        //----------------
     }
-    
+
     int counter = 0;
-    
-    public void genNew(){
-    
-    
-         ///--------------------------
+
+    public void genNew() {
+
+        ///--------------------------
          char[] array = "qrstuvwxyz!1234567890@#$%^&*()ABCDE".toCharArray();
-       
+
         Random rand = new Random();
 
         for (int i = 0; i < array.length; i++) {
 
-           int randomIndexToSwap = rand.nextInt(array.length);
-           char temp = array[randomIndexToSwap];
-          array[randomIndexToSwap] = array[i];
+            int randomIndexToSwap = rand.nextInt(array.length);
+            char temp = array[randomIndexToSwap];
+            array[randomIndexToSwap] = array[i];
             array[i] = temp;
 
-       }
+        }
         //STRING NUMBER
-      // String ranCode = char.toString(array[0]) + array[1];
-    String str = String.valueOf(array);
-		// recommended way
-		str = new String(array).substring(0, 5);
-       spcba_code.setText(str);
-       
-       //----------------
+        // String ranCode = char.toString(array[0]) + array[1];
+        String str = String.valueOf(array);
+        // recommended way
+        str = new String(array).substring(0, 5);
+        spcba_code.setText(str);
+
+        //----------------
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -130,14 +126,12 @@ public class Login extends javax.swing.JFrame {
         tf_recaptcha.setForeground(new java.awt.Color(102, 102, 102));
         tf_recaptcha.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         tf_recaptcha.setText("Enter the code above");
+        tf_recaptcha.setToolTipText("Enter the code above");
         tf_recaptcha.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(204, 204, 204), 1, true));
         tf_recaptcha.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         tf_recaptcha.setHighlighter(null);
         tf_recaptcha.setName(""); // NOI18N
         tf_recaptcha.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                tf_recaptchaFocusGained(evt);
-            }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 tf_recaptchaFocusLost(evt);
             }
@@ -147,6 +141,11 @@ public class Login extends javax.swing.JFrame {
                 tf_recaptchaMouseClicked(evt);
             }
         });
+        tf_recaptcha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tf_recaptchaKeyPressed(evt);
+            }
+        });
         RECAPTHA_PANEL.add(tf_recaptcha, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 210, 40));
 
         recaptha_title.setFont(new java.awt.Font("SansSerif", 1, 36)); // NOI18N
@@ -154,6 +153,7 @@ public class Login extends javax.swing.JFrame {
         RECAPTHA_PANEL.add(recaptha_title, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, -1, -1));
 
         spcba_code.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        spcba_code.setForeground(new java.awt.Color(255, 0, 0));
         spcba_code.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         spcba_code.setText("spcba_code");
         RECAPTHA_PANEL.add(spcba_code, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 210, 39));
@@ -246,79 +246,54 @@ public class Login extends javax.swing.JFrame {
     private void submit_recaptchaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submit_recaptchaMouseClicked
         // TODO add your handling code here:
         String userCode = tf_recaptcha.getText();
-        
-        if(userCode.equals(spcba_code.getText())){
-        
-       RECAPTHA_PANEL.setVisible(false);     
+
+        if (userCode.equals(spcba_code.getText())) {
+
+            RECAPTHA_PANEL.setVisible(false);
+            tf_username.setVisible(true);
+        tf_password.setVisible(true);
+        login_button.setVisible(true);
             counter = 0;
-        }
-        else if(!(userCode.equals(spcba_code.getText())) && counter == 2){
-             tf_recaptcha.setText("Invalid Code!");
-           genNew();
-           counter = 0;
-           tf_recaptcha.setForeground(Color.red);
-           tf_recaptcha.setText("Generated new code!");
-        }else if(!(userCode.equals(spcba_code.getText()))){
+        } else if (!(userCode.equals(spcba_code.getText())) && counter == 2) {
+            tf_recaptcha.setText("Invalid Code!");
+            genNew();
+            counter = 0;
             tf_recaptcha.setForeground(Color.red);
-         tf_recaptcha.setText("Invalid Code!");
-         counter++;
-          
-      
+            tf_recaptcha.setText("Created new Captcha!");
+        } else if (!(userCode.equals(spcba_code.getText()))) {
+            tf_recaptcha.setForeground(Color.red);
+            tf_recaptcha.setText("Invalid Code!");
+            counter++;
+
         }
     }//GEN-LAST:event_submit_recaptchaMouseClicked
 
-    private void tf_recaptchaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_recaptchaFocusGained
-  if(tf_recaptcha.getText().equals("Invalid Code!") || tf_recaptcha.getText().equals("Generated new code!") ){
-      tf_recaptcha.setForeground(Color.black);      
-      tf_recaptcha.setText("");
-      }
-    }//GEN-LAST:event_tf_recaptchaFocusGained
-
-    private void tf_recaptchaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_recaptchaFocusLost
-        String str = tf_recaptcha.getText();
-      
-      if(str.isBlank()){
-            tf_recaptcha.setForeground(Color.gray);
-       tf_recaptcha.setText("Enter the code above");
-      }
-    }//GEN-LAST:event_tf_recaptchaFocusLost
-
-    private void tf_recaptchaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_recaptchaMouseClicked
-         String str = tf_recaptcha.getText();
-      
-      if(str.equals("Enter the code above") ||str.equals("Invalid Code!") ||str.equals("Generated new code!")){
-            tf_recaptcha.setForeground(Color.black);
-       tf_recaptcha.setText("");
-      }
-        
-    }//GEN-LAST:event_tf_recaptchaMouseClicked
-
     private void tf_usernameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_usernameMouseClicked
-         String str = tf_username.getText();
-      
-      if(!(str.contains("Username"))){
-           
-      }else{
-        tf_username.setForeground(Color.black);
-       tf_username.setText("");
-      }
+        String str = tf_username.getText();
+
+        if (!(str.contains("Username"))) {
+
+        } else {
+            tf_username.setForeground(Color.black);
+            tf_username.setText("");
+        }
     }//GEN-LAST:event_tf_usernameMouseClicked
 
     private void tf_usernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_usernameFocusLost
-      String str = tf_username.getText();
-      
-      if(str.isBlank()){
+        String str = tf_username.getText();
+
+        if (str.isBlank()) {
             tf_username.setText("Username");
             tf_username.setForeground(Color.gray);
-      }
-      
+        }
+
     }//GEN-LAST:event_tf_usernameFocusLost
 
     private void tf_usernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_usernameKeyPressed
-      if(tf_username.getText().equals("Username")){
+        if (tf_username.getText().equals("Username")) {
             tf_username.setText("");
-             tf_username.setForeground(Color.black);
-      }
+            tf_username.setForeground(Color.black);
+        }
     }//GEN-LAST:event_tf_usernameKeyPressed
 
     private void login_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_login_buttonMouseClicked
@@ -326,44 +301,64 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_login_buttonMouseClicked
 
     private void tf_passwordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_passwordMouseClicked
-             String str = tf_password.getText();
-      
-      if(!(str.contains("Password"))){
-           
-      }else{
-        tf_password.setForeground(Color.black);
-       tf_password.setText("");
-      }
+        String str = tf_password.getText();
+
+        if (!(str.contains("Password"))) {
+
+        } else {
+            tf_password.setForeground(Color.black);
+            tf_password.setText("");
+        }
     }//GEN-LAST:event_tf_passwordMouseClicked
 
     private void tf_passwordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_passwordFocusLost
         String str = tf_password.getText();
-      
-      if(str.isBlank()){
+
+        if (str.isBlank()) {
             tf_password.setText("Password");
             tf_password.setForeground(Color.gray);
-      }
+        }
     }//GEN-LAST:event_tf_passwordFocusLost
 
     private void tf_passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_passwordKeyPressed
-      if(tf_password.getText().equals("Password")){
-          tf_password.setForeground(Color.black);
+        if (tf_password.getText().equals("Password")) {
+            tf_password.setForeground(Color.black);
             tf_password.setText("");
-      }
+        }
     }//GEN-LAST:event_tf_passwordKeyPressed
 
     private void tf_passwordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_passwordFocusGained
-        if(tf_password.getText().equals("Password")){
+        if (tf_password.getText().equals("Password")) {
             tf_password.setForeground(Color.black);
             tf_password.setText("");
-      }
+        }
     }//GEN-LAST:event_tf_passwordFocusGained
-  public void close(){
-    WindowEvent closeWindow = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
-    Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeWindow);
+
+    private void tf_recaptchaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tf_recaptchaKeyPressed
+        if (tf_recaptcha.getText().equals("Enter the code above") || tf_recaptcha.getText().equals("Invalid Code!") || tf_recaptcha.getText().equals("Created new Captcha!")) {
+            tf_recaptcha.setForeground(Color.black);
+            tf_recaptcha.setText("");
+        }
+    }//GEN-LAST:event_tf_recaptchaKeyPressed
+
+    private void tf_recaptchaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tf_recaptchaFocusLost
+        if (tf_recaptcha.getText().isBlank()) {
+            tf_recaptcha.setForeground(Color.gray);
+            tf_recaptcha.setText("Enter the code above");
+        }
+    }//GEN-LAST:event_tf_recaptchaFocusLost
+
+    private void tf_recaptchaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tf_recaptchaMouseClicked
+        if (tf_recaptcha.getText().equals("Enter the code above") || tf_recaptcha.getText().equals("Invalid Code!") || tf_recaptcha.getText().equals("Created new Captcha!")) {
+            tf_recaptcha.setForeground(Color.black);
+            tf_recaptcha.setText("");
+        }
+    }//GEN-LAST:event_tf_recaptchaMouseClicked
+    public void close() {
+        WindowEvent closeWindow = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeWindow);
     }
-  
-    
+
     /**
      * @param args the command line arguments
      */
