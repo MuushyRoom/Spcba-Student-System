@@ -4,6 +4,12 @@ import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.util.Random;
 
+import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -20,9 +26,11 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
 
-        tf_username.setVisible(false);
-        tf_password.setVisible(false);
-        login_button.setVisible(false);
+        //tf_username.setVisible(false);
+       // tf_password.setVisible(false);
+       // login_button.setVisible(false);
+       
+       RECAPTHA_PANEL.setVisible(false);
         ///--------------------------
          char[] array = "qrstuvwxyz!1234567890@#$%^&*()ABCDE".toCharArray();
 
@@ -45,6 +53,11 @@ public class Login extends javax.swing.JFrame {
 
         //----------------
     }
+    
+    
+    static final String DB_URL = "jdbc:mysql://localhost/spcba_student_system";
+    static final String user = "root";
+    static final String password = "";
 
     int counter = 0;
 
@@ -233,6 +246,11 @@ public class Login extends javax.swing.JFrame {
                 login_buttonMouseClicked(evt);
             }
         });
+        login_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                login_buttonActionPerformed(evt);
+            }
+        });
         jPanel1.add(login_button, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 220, 110, 40));
 
         spcba_login_panel.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 990, 300));
@@ -243,6 +261,7 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void submit_recaptchaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submit_recaptchaMouseClicked
         // TODO add your handling code here:
         String userCode = tf_recaptcha.getText();
@@ -251,8 +270,8 @@ public class Login extends javax.swing.JFrame {
 
             RECAPTHA_PANEL.setVisible(false);
             tf_username.setVisible(true);
-        tf_password.setVisible(true);
-        login_button.setVisible(true);
+            tf_password.setVisible(true);
+            login_button.setVisible(true);
             counter = 0;
         } else if (!(userCode.equals(spcba_code.getText())) && counter == 2) {
             tf_recaptcha.setText("Invalid Code!");
@@ -354,6 +373,47 @@ public class Login extends javax.swing.JFrame {
             tf_recaptcha.setText("");
         }
     }//GEN-LAST:event_tf_recaptchaMouseClicked
+
+    private void login_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_login_buttonActionPerformed
+             
+        
+        String username = tf_username.getText();
+        String password = tf_password.getText();
+        
+        
+       
+        
+        try(Connection conn = DriverManager.getConnection(DB_URL, user, password);
+         Statement stmt = conn.createStatement();) {		      
+         
+  
+        
+
+    
+         String sql = "SELECT * FROM `Students` WHERE username = \""+username+"\" AND password = \""+password+"\"";
+         ResultSet rs = stmt.executeQuery(sql);
+         rs = stmt.executeQuery(sql);
+         
+         while (rs.next())
+{
+  if(rs.getString("username").equals(username)&& rs.getString("password").equals(password)){
+         
+        close();
+        Student_System student_system = new Student_System();
+        student_system.setVisible(true);
+         }
+        
+}
+         
+       
+        
+        
+         //rs.close();
+      } catch (SQLException e) {
+         e.printStackTrace();
+      } 
+        
+    }//GEN-LAST:event_login_buttonActionPerformed
     public void close() {
         WindowEvent closeWindow = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(closeWindow);
@@ -363,6 +423,37 @@ public class Login extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
+        Connection conn1 = null;
+
+        try {
+            // connect way #1
+
+            conn1 = DriverManager.getConnection(DB_URL, user, password);
+            if (conn1 != null) {
+                System.out.println("Connected to the database SPCBA STUDENT DATABASE");
+
+                //Statement stmt = conn1.createStatement();   //Creating Statement.
+                //Executing Statement.
+                // stmt.executeUpdate("create table `ScoreHistory`(`id` integer, `Player1` varchar(20), `Player2` varchar(20), `Score` integer)");
+                //  stmt.executeUpdate("insert into `ScoreHistory` values(3, 'Black', 'White', 10)");
+                // stmt.executeUpdate("insert into `ScoreHistory` values(4, 'Black', 'White', 10)");
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("An error occurred. Maybe user/password is invalid");
+            ex.printStackTrace();
+
+        } finally {
+            if (conn1 != null) {
+                try {
+                    conn1.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
